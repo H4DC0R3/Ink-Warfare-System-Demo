@@ -27,3 +27,24 @@ Painting uses render target operations and optional mesh surface captures. The o
 ## Are the bots production ready?
 
 No. The demo bots are simple and intended for testing. They should be replaced or extended for a production game.
+
+
+## Does the default paint workflow support Nanite?
+
+Nanite does not have full support in the default paint workflow. It can work in some cases, but Unreal Engine may recalculate Nanite geometry at runtime in ways that affect the paint bake step. This can create inconsistencies in the final visual result. For production paintable surfaces, use regular Static Mesh assets with Nanite disabled.
+
+## Does the default paint workflow support Skeletal Mesh?
+
+No. Skeletal Mesh components are not supported by the default paint workflow.
+
+## Why does the system use UV channel 1?
+
+UV channel 1 is used as the unwrap channel for the paint render target. Unreal commonly generates this channel as the lightmap UV channel, which usually provides separated islands suitable for paint projection. It also allows assets with multiple material slots to share one paint render target.
+
+## What is `RT_Damage`?
+
+`RT_Damage` is the render target texture parameter name expected by the material function and the paint system. If the material function is duplicated or recreated, keep this name unchanged and sample it with UV channel 1.
+
+## What controls team colors in the demo?
+
+The central Material Parameter Collection is `MPC_IWS_TeamColors`. In the demo, it is updated by the Game State at the beginning of the match. The Begin Play logic in `GS_InkWarfare` and `GM_InkWarfare_Gameplay` defines the active team color flow.

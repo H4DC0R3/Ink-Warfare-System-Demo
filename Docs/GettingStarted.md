@@ -6,7 +6,9 @@ This guide explains the minimum setup required to understand and test the Ink Wa
 
 - Unreal Engine version supported by the Fab package.
 - A project with the Ink Warfare System plugin enabled.
-- At least one static mesh that should receive paint.
+- At least one supported Static Mesh that should receive paint.
+- UV channel 1 on paintable meshes.
+- A material based on `M_IWS_DefaultAsset` or another material that uses the Ink Warfare material function.
 - A gameplay object, projectile, weapon, or trace system that can call `IWS Receive Impact`.
 
 ## Basic setup flow

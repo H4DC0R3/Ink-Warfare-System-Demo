@@ -47,3 +47,15 @@ The `Config` category usually does not need to diverge much from the values used
 ## Scoring
 
 The plugin also contains helpers for team score and area score calculation. These use render-target reads and team score materials to convert painted areas into team score values. The exact scoring rules can be adapted by the game mode or gameplay framework using the plugin.
+
+
+## Mesh and material requirements
+
+For custom assets, the default paint workflow expects a supported Static Mesh with UV channel 1. UV channel 1 is used as the unwrap channel for the paint data. This is also what allows a mesh with multiple material slots to share a single paint render target.
+
+The visible material should use the Ink Warfare material function, or an equivalent setup that keeps the expected `RT_Damage` render target parameter and samples it with UV channel 1.
+
+For detailed setup, see:
+
+- [Mesh Setup](MeshSetup.md)
+- [Material Setup](MaterialSetup.md)

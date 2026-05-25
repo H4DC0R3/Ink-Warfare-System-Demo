@@ -10,6 +10,8 @@ Start here:
 
 - [Getting Started](Docs/GettingStarted.md)
 - [Painting System Overview](Docs/PaintingSystemOverview.md)
+- [Mesh Setup](Docs/MeshSetup.md)
+- [Material Setup](Docs/MaterialSetup.md)
 - [Ink Hits Classes](Docs/InkHitsClasses.md)
 - [IWS Receive Impact](Docs/IWSReceiveImpact.md)
 - [Optimization and Performance](Docs/OptimizationAndPerformance.md)
@@ -19,6 +21,8 @@ Start here:
 ## Main features
 
 - Radial paint hits on supported static meshes.
+- UV channel 1 based paint unwrap workflow.
+- Material function based shader integration.
 - Team-colored paint ownership.
 - Paint material override per impact.
 - Render-target based impact accumulation.
