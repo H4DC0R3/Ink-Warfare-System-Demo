@@ -4,6 +4,8 @@
 
 This public repository contains documentation, screenshots, demo instructions, and release notes.
 
+Use Discord for support. https://discord.gg/xSj4qdgZvd
+
 ## Documentation
 
 Start here:
