@@ -1,5 +1,8 @@
 # Getting Started
 
+> **Config reference**  
+The demo config files used by the downloadable demo are included in `Demo/Config/DefaultEngine.ini` and `Demo/Config/DefaultEditor.ini`. Use them only as reference files when comparing the demo presentation with a clean Unreal Engine project, because Unreal's default project settings can produce a different visual result.
+
 This guide explains the minimum setup required to understand and test the Ink Warfare System demo.
 
 ## Requirements
@@ -20,6 +23,13 @@ This guide explains the minimum setup required to understand and test the Ink Wa
 5. On hit, call `IWS Receive Impact` on the actor responsible for the paint system.
 6. Pass the `Hit Result`, hit size, intensity, speed, team, and paint material.
 7. Play the map and verify that the impact appears on the target mesh.
+
+
+## Enable the plugin after download
+
+When the plugin is installed from the Fab library, Unreal can import it with the plugin disabled by default. Open the **Plugins** window, find **Ink Warfare System**, enable it, and restart the editor when prompted.
+
+![Enable the Ink Warfare System plugin after downloading from Fab](../Images/IMG_EnablePlugin_AfterFabDownload.png)
 
 ## Main demo classes
 

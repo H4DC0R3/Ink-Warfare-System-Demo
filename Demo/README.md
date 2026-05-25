@@ -1,5 +1,8 @@
 # Demo Build
 
+> **Config reference**  
+The demo config files used by the downloadable demo are included in `Demo/Config/DefaultEngine.ini` and `Demo/Config/DefaultEditor.ini`. Use them only as reference files when comparing the demo presentation with a clean Unreal Engine project, because Unreal's default project settings can produce a different visual result.
+
 The demo project is included inside the plugin package and is intended to show Ink Warfare System working in a playable environment.
 
 ## What the demo shows
