@@ -1,0 +1,27 @@
+# Unreal transient folders
+Saved/
+Intermediate/
+DerivedDataCache/
+.vs/
+
+# Build output
+Binaries/
+Build/
+*.sln
+*.opensdf
+*.sdf
+*.VC.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Archives should be attached to Releases instead of committed
+*.zip
+*.rar
+*.7z
+
+# OS files
+.DS_Store
+Thumbs.db
