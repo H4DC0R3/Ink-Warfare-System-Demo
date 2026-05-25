@@ -1,7 +1,5 @@
 # Ink Warfare System
 
-> **Demo project config reference**  
-The demo project configuration used to produce the downloadable demo is available in `Demo/Config/DefaultEngine.ini` and `Demo/Config/DefaultEditor.ini`. These files are provided only as a visual/reference baseline, because a default Unreal Engine project uses different editor and project settings and may not match the look presented in the downloadable demo.
 
 **Ink Warfare System** is a multiplayer paint shooter framework for Unreal Engine. It provides a paint impact pipeline, team-based paint ownership, scoring helpers, and a playable demo project that shows the system working in a game-like setup.
 
@@ -10,6 +8,10 @@ The demo project is included inside the plugin package, so it can be used as the
 [![Discord Support](https://img.shields.io/badge/Discord-Support%20Contact-5865F2?logo=discord&logoColor=white)](https://discord.gg/xSj4qdgZvd)
 
 Use the Discord link above for support contact, setup questions, bug reports, and general help with the plugin.
+
+> **Demo project config reference**  
+The demo project configuration used to produce the downloadable demo is available in `Demo/Config/DefaultEngine.ini` and `Demo/Config/DefaultEditor.ini`. These files are provided only as a visual/reference baseline, because a default Unreal Engine project uses different editor and project settings and may not match the look presented in the downloadable demo.
+
 
 ## Documentation
 
@@ -66,3 +68,5 @@ Start here:
 For support contact, setup help, bug reports, and general questions, use Discord:
 
 [![Discord Support](https://img.shields.io/badge/Discord-Support%20Contact-5865F2?logo=discord&logoColor=white)](https://discord.gg/xSj4qdgZvd)
+
+
