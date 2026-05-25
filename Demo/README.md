@@ -1,6 +1,6 @@
 # Demo Build
 
-The demo build is intended to show Ink Warfare System working in a playable environment.
+The demo project is included inside the plugin package and is intended to show Ink Warfare System working in a playable environment.
 
 ## What the demo shows
 
@@ -18,11 +18,11 @@ The demo build is intended to show Ink Warfare System working in a playable envi
 - Final game-ready matchmaking.
 - Final project-specific balancing.
 
-## Download
+## Demo project location
 
-Download the latest packaged demo from the GitHub Releases page when available.
+The demo project is included inside the plugin package. Use it as the first reference project after installing the plugin.
 
-Suggested release asset name:
+When a separate packaged executable is provided, it can also be distributed through the GitHub Releases page. Suggested release asset name:
 
 ```text
 InkWarfareSystem_Demo_Windows.zip
@@ -30,13 +30,13 @@ InkWarfareSystem_Demo_Windows.zip
 
 ## How to test
 
-1. Download the demo zip from Releases.
-2. Extract it to a folder outside protected Windows directories.
-3. Run the executable.
-4. Start the demo match.
+1. Install the plugin package.
+2. Open the included demo project.
+3. Open the demo map.
+4. Start the demo match or Play In Editor.
 5. Shoot paintable surfaces.
 6. Verify that paint appears and team colors behave as expected.
 
 ## Notes
 
-Packaged demos can be large. The executable zip should be attached to a GitHub Release instead of committed directly to the repository.
+Packaged demos can be large. If a standalone executable build is provided, it should be attached to a GitHub Release instead of committed directly to the repository.
