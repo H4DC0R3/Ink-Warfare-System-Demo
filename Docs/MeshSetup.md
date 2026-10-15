@@ -30,14 +30,33 @@ In most Unreal Engine projects, UV channel 1 is already generated as the lightma
 
 The main purpose of using UV channel 1 is to make the paint target independent from the visible material layout.
 
-This is especially important for assets that use multiple material slots. With the UV 1 workflow, the asset can be painted using a single paint render target for the whole mesh, instead of requiring one paint texture per material slot.
+This is especially important for assets that use multiple material slots. With the UV 1 workflow, the asset can be painted using a single paint mask for the whole mesh, instead of requiring one paint texture per material slot.
 
 In practice, this means:
 
-- One paint render target can represent the paint state of the asset.
+- One paint mask represents the paint state of the asset.
 - Assets with multiple material slots can still share the same paint data.
 - The visible materials can remain customized for the project.
 - The paint layer is driven by the unwrap data instead of the visible UV layout.
+
+## Mask size per mesh
+
+Each mesh gets a square mask sized from the surface of its bounding box, so a small prop does not use the same texture as a large floor:
+
+```txt
+side = sqrt(surface area in m2) x Paint Texels Per Meter / 1.41
+rounded up to a power of two, clamped to Min/Max Paint Resolution
+```
+
+`Compute Paint Resolution` returns the size a mesh gets. If paint looks blurry on a large mesh, raise `Paint Texels Per Meter` or `Max Paint Resolution` on the hit maker. If memory is high, lower them. The spray demo uses `256` texels per meter for fine lines, the battle uses `64`.
+
+## Meshes that start painted
+
+`Fill Paintable` gives a mesh its mask right away and fills it with a color. `Fill Actors With Tag` does it for every static mesh of the actors with a tag. Use it for surfaces that start painted, like the dirty walls of the cleaning demo, or to avoid the capture cost on the first hit during gameplay. `BP_IWS_PaintDemoSetup` calls it on the actors tagged `IWS.Paintable`.
+
+## Meshes left out of the paint
+
+Add the tag `IWS.NoPaint` (the `No Paint Tag` of the hit maker) to the actor `Tags`, or to the `Component Tags` of a single mesh. Hits on it are ignored and it never gets a paint mask. Use it for glass, props that should stay clean, or meshes without a usable UV 1.
 
 ## Recommended mesh checklist
 
@@ -48,14 +67,14 @@ Before testing an asset, verify:
 3. The mesh has UV channel 1.
 4. UV channel 1 has valid separated islands.
 5. The mesh material uses the Ink Warfare material function.
-6. The actor is registered by the paint hit system used in the level.
+6. The mesh does not have the `IWS.NoPaint` tag.
 7. The gameplay hit calls `IWS Receive Impact` with a valid hit result.
 
 ## Common issues
 
 ### The mesh does not paint
 
-Check that the mesh has UV channel 1 and that the material uses the expected paint render target parameter.
+Check that the mesh has UV channel 1, that the material uses the expected paint render target parameter, and that the actor or component is not tagged `IWS.NoPaint`.
 
 ### Paint appears on unexpected parts of the mesh
 
@@ -64,3 +83,7 @@ Check the UV channel 1 unwrap. Overlapping islands can cause different surface a
 ### Only some material slots seem to react
 
 Make sure every visible material slot that should show paint uses the Ink Warfare material function or an equivalent shader setup.
+
+### Paint is blurry or blocky
+
+The mask of that mesh is too small for its size. Raise `Paint Texels Per Meter` or `Max Paint Resolution`, or split a very large floor into a few meshes.

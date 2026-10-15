@@ -2,72 +2,91 @@
 
 This page describes the main classes used by the paint hit system.
 
-## `IWS_Ink_Hits`
+## Class hierarchy
 
-`IWS_Ink_Hits` is the main C++ class for the optimized paint pipeline.
+```txt
+AActor
+└── IWS_HitMaker          paint masks, unwrap capture, scores, paint queries, memory settings
+    └── IWS_InkHits       radial hits, network, trails, drips, save/load, bot helpers, performance
+        ├── BP_IWS_PS_InkHits            ink battle
+        ├── BP_IWS_PS_InkHits_Spray      spray demo
+        └── BP_IWS_PS_InkHits_Cleaning   cleaning demo
+```
 
-It does not update the whole match by itself. Instead, it exposes the core functions and utilities needed by other classes to register impacts, update radial hits, manage paintable meshes, and draw paint into render targets.
+`IWS_RadialHits` is a thin child of `IWS_HitMaker` kept for compatibility.
 
-Main responsibilities:
+## `IWS_InkHits`
 
-- Receive paint impacts through the gameplay interface.
-- Replicate paint hit registration through server and multicast calls.
-- Register static mesh components as paintable entries when they receive hits.
-- Store active hit data per paintable mesh.
-- Manage render targets for impact and unwrap textures.
-- Capture surface unwrap data when required.
-- Draw hit materials into the impact render target.
-- Process radial hit animation over time.
-- Remove expired hits.
-- Apply performance budgets for captures, paintables, and draw operations.
+`IWS_InkHits` is the main C++ class of the paint pipeline. It implements the `IWS Gameplay Interface`, so weapons call `IWS Receive Impact` on it.
+
+It does not run the match by itself. It exposes the functions and utilities other classes need:
+
+- Receive paint impacts and replicate them in compact batches.
+- Send the paint that already exists to players who join late.
+- Register static mesh components as paintables when they receive hits.
+- Store and animate the active hits of each paintable.
+- Create paint masks sized from the mesh surface and reuse unwrap captures.
+- Draw hit materials into the masks, only where each hit can reach.
+- Keep a CPU copy of the paint for queries and scores.
+- Paint color hits, fill meshes, run materials over the paint and spill paint below walls.
+- Save and load the paint of a level.
+- Swim trails, drips and splats.
+- Helpers for bots: zones, paint targets, combat spots, climb routes.
+- Performance budgets and the `iws.Perf` report.
+
+The variables are grouped in categories under `IWS`:
+
+| Category | What it holds | Page |
+| --- | --- | --- |
+| `IWS|Paint System` | Default team, No Paint Tag, runtime paintable arrays. | [Painting System Overview](PaintingSystemOverview.md) |
+| `IWS|Paint System|Trail` | Swim trail materials and waves. | [Trails, Splats and Drips](TrailsSplatsAndDrips.md) |
+| `IWS|Radial Hits|Optimization` and `Distance` | Update budgets and view-based steps. | [Optimization and Performance](OptimizationAndPerformance.md) |
+| `IWS|Radial Hits|Drips` | Paint running down walls. | [Trails, Splats and Drips](TrailsSplatsAndDrips.md) |
+| `IWS|Paint Queries` | CPU copy of the paint. | [Paint Queries](PaintQueries.md) |
+| `IWS|Network` | Hit batches and late join sync. | [Networking](Networking.md) |
+| `IWS|Config` and `Config|Memory` | Materials, unwrap, mask format and sizes. | [Painting System Overview](PaintingSystemOverview.md) |
+
+<p align="center">
+  <img src="../Images/IMG_PaintSystemTrailVars.png" alt="Paint System and Trail variables of BP_IWS_PS_InkHits" width="900" />
+</p>
 
 ## `BP_IWS_PS_InkHits`
 
-`BP_IWS_PS_InkHits` is the class used by the demo project. It is derived from `BP_IWS_ZoneCheck`.
+`BP_IWS_PS_InkHits` is the hit maker placed in the ink battle map. It is a data-only child of `IWS_InkHits` that holds the demo values of every setting. For most users, this Blueprint is the best practical reference for how the paint system is configured in a playable project. Open it and check the `IWS` categories in **Class Defaults**.
 
-This class contains the demo loop where the system registers paintable assets and drives the main update flow used in the demo. For most users, this Blueprint is the best practical reference for how the paint system is expected to be placed and configured in a playable project.
+`BP_IWS_PS_InkHits_Spray` and `BP_IWS_PS_InkHits_Cleaning` do the same for the tool demos, with `RTF_RGBA16f` masks and higher `Paint Texels Per Meter`.
 
-## Legacy Blueprint classes
+## `BP_IWS_ZoneCheck`
 
-The system also includes legacy Blueprint versions:
+`BP_IWS_ZoneCheck` is a zone actor: a box placed over an area of the map with a `Team Zone`. Bots read the paint inside each zone to decide where to go (`Select Bot Zone`), and the game mode can score the meshes inside it.
 
-- `BP_IWS_MainHitMaker`
-- `BP_IWS_InkHits`
+## Removed legacy classes
 
-These are kept as reference and compatibility assets. The C++ class was updated for better performance, but it keeps the same core formula used by the Blueprint implementation.
-
-For new projects, prefer the optimized C++ path and use the Blueprint versions mainly as a learning reference.
+`BP_IWS_MainHitMaker`, `BP_IWS_InkHits` and `BP_IWS_RadialHits` were Blueprint versions of the first paint pipeline, kept in 1.x as reference. They were removed in 2.0. The C++ class keeps the same core formula.
 
 ## Runtime paintable data
 
-Paintable meshes are stored as entries containing component references, hit arrays, render targets, and score data.
+Paintable meshes are stored as `ST_IWS_MeshPaint` entries containing component references, hit arrays, render targets, and score data.
 
 A paintable entry can contain:
 
-- Target primitive component.
-- Static mesh reference.
-- Hit alpha values.
-- Hit speeds.
-- Hit locations.
-- Hit normals.
-- Hit sizes.
-- Hit teams.
-- Hit paint materials.
+- Target primitive component and static mesh.
+- Hit alpha values, speeds, locations, normals, sizes, teams and paint materials.
 - Final-frame-only flags for distance optimization.
-- Impact render target.
-- Unwrap render target.
-- Capture dirty state.
-- Last captured transform.
+- Paint mask (impact render target).
+- Unwrap render target and the unwrap origin.
+- Trail texture.
+- Capture dirty state and last captured transform.
 - Team score data.
 
 The hit arrays are processed together. When adding custom logic, keep these arrays aligned by index.
 
 ## Network behavior
 
-`IWS Receive Impact` enters the C++ paint class and uses a server/multicast path:
+`IWS Receive Impact` enters the C++ paint class:
 
-- If the actor has authority, the hit is sent to the multicast registration path.
-- If the actor does not have authority, it calls the server registration RPC.
-- The server multicasts the hit so every client can register and process the same paint impact.
+- On the server, the hit is painted right away and queued for the next network batch.
+- On a client, the hit is sent to the server, which paints it and adds it to the batch.
+- Every `Hit Replication Interval` the server multicasts the batch, numbered in sequence, and every client paints the same hits.
 
-This keeps paint registration consistent in multiplayer-oriented setups.
+See [Networking](Networking.md) for late joiners and resync.

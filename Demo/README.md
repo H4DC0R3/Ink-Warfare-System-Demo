@@ -7,12 +7,13 @@ The demo project is included inside the plugin package and is intended to show I
 
 ## What the demo shows
 
-- Basic paint impacts.
-- Team-colored paint behavior.
-- Paintable surfaces.
-- Demo match flow.
-- Simple bots.
-- Example usage of the main paint classes.
+- **Ink Battle** (`LVL_IWS_Gameplay_01`): team turf war with bots, swimming in team paint, swim trails, ink tank and refill, zones and match score.
+- **Spray** (`LVL_IWS_Demo_Spray`): first person spray cans with free colors, caps and intensity.
+- **Cleaning** (`LVL_IWS_Demo_Cleaning`): a water hose that washes dirty walls and floors, with running and drying water.
+- Main menu with map choice, lobby with teams and bots, late join sync.
+- Save and load of the paint (F5 / F9 in the tool demos).
+
+See [Paint Tools and Demos](../Docs/PaintToolsAndDemos.md) for the controls.
 
 ## What the demo does not include
 
@@ -25,7 +26,7 @@ The demo project is included inside the plugin package and is intended to show I
 
 The demo project is included inside the plugin package. Use it as the first reference project after installing the plugin.
 
-When a separate packaged executable is provided, it can also be distributed through the GitHub Releases page. Suggested release asset name:
+A packaged Windows executable is distributed through the GitHub Releases page of this repository:
 
 ```text
 InkWarfareSystem_Demo_Windows.zip
@@ -35,11 +36,12 @@ InkWarfareSystem_Demo_Windows.zip
 
 1. Install the plugin package.
 2. Open the included demo project.
-3. Open the demo map.
-4. Start the demo match or Play In Editor.
-5. Shoot paintable surfaces.
+3. Open `LVL_IWS_MainMenu` and start Play In Editor, or run the packaged demo.
+4. Host and pick a map.
+5. Shoot, spray or wash paintable surfaces.
 6. Verify that paint appears and team colors behave as expected.
+7. For multiplayer, join with a second instance after the match started and check that it sees the paint.
 
 ## Notes
 
-Packaged demos can be large. If a standalone executable build is provided, it should be attached to a GitHub Release instead of committed directly to the repository.
+Packaged demos can be large. A standalone executable build is attached to a GitHub Release instead of committed directly to the repository.
