@@ -1,6 +1,6 @@
 # Ink Warfare System
 
-**Current version: 2.0** · [Changelog](CHANGELOG.md)
+**Current version: 2.0.1** · [Changelog](CHANGELOG.md)
 
 **Ink Warfare System** is a multiplayer paint framework for Unreal Engine. It provides a paint impact pipeline, team-based paint ownership, paint that gameplay code can read back, scoring helpers, and a playable demo project that shows the system working in three game-like setups: an ink battle, a spray can and a water hose.
 

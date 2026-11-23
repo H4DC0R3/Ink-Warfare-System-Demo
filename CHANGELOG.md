@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.0.1
+
+Fix for the packaged demo and for packaged games that use the plugin.
+
+### Fixed
+
+- **Paint in packaged builds.** In a packaged game the engine does not draw a mesh while the pipelines (PSOs) of a new material are still compiling. The unwrap capture of a mesh made in that moment came out empty and was kept, so that mesh could never be painted or read. In the demo, the spray and the cleaning water did nothing on most surfaces and the ink tank did not refill when swimming. The capture now waits until the pipelines of the unwrap material are ready and runs again, and the hit maker starts compiling those pipelines at begin play, so the wait is short or does not happen. The editor was not affected.
+
+### Changed
+
+- **Demo texture pool.** The demo project sets `r.Streaming.PoolSize=4096` (see `Demo/Config/DefaultEngine.ini`), so the packaged demo no longer shows the video memory warning.
+
+### Notes
+
+- The first time the packaged demo runs on a machine, the paint can take a moment to start while the graphics driver compiles its pipelines. From the second run on, the driver cache makes it immediate.
+
 ## 2.0.0
 
 Version 2.0 turns the plugin into a general paint system. The paint can now be read back by gameplay code, it syncs to players who join late, it works with colors and amounts besides teams, and the demo gained two new modes and much smarter bots.
